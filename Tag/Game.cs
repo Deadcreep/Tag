@@ -6,35 +6,29 @@ using System.Threading.Tasks;
 
 namespace Tag
 {
-    
+
     struct Coordinate
     {
-        public int x; //get set
-        public int y;
-
-        public Coordinate(int a, int b)
-        {
-            x = a;
-            y = b;
-        }
+        public int X { get;  set; }
+        public int Y { get;  set; }
     }
 
     class Game
     {
-        int[,] coordinates;        
-        int size;
+        int[,] coordinates;
+        public int Size { get; private set; }
 
         public Game(int size)
         {
-            this.size = size;
+            this.Size = size;
             FillField(size);
         }
 
         private void FillField(int size)
         {
-            
+
             coordinates = new int[size, size];
-            int val = 1;  
+            int val = 1;
             for (int x = 0; x < size; x++)
                 for (int y = 0; y < size; y++)
                 {
@@ -42,13 +36,13 @@ namespace Tag
                     val++;
                 }
         }
-               
+
 
         public int this[int x, int y]
         {
             get
             {
-                if(x >= size || y >= size)
+                if (x >= Size || y >= Size)
                 {
                     throw new IndexOutOfRangeException();
                 }
@@ -60,17 +54,22 @@ namespace Tag
             }
         }
 
-        public Coordinate  GetLocation(int value)
+        public Coordinate GetLocation(int value)
         {
-            for (int x = 0; x < size; x++)
-                for (int y = 0; y < size; y++)
-                    if(value == coordinates[x, y]) 
+            for (int x = 0; x < Size; x++)
+                for (int y = 0; y < Size; y++)
+                    if (value == coordinates[x, y])
                     {
-                        return  new Coordinate(x, y);                        
+                        return new Coordinate
+                        {
+                            X = x,
+                            Y = y
+                        };
                     }
-            throw new ArgumentException ("Value does not exist");
+
+            throw new ArgumentException("Value does not exist");
         }
-        
+
         public void Shift(int value)
         {
             if (value == 0)
@@ -79,10 +78,10 @@ namespace Tag
             }
             var source = GetLocation(value);
             var dest = GetLocation(0);
-            if (Math.Abs(source.x + source.y-dest.x-dest.y)!=1)
+            if (Math.Abs(source.X + source.Y - dest.X - dest.Y) != 1)
                 throw new Exception("Can't move " + value);
-                coordinates[source.x, source.y] = 0;
-                coordinates[dest.x, dest.y] = value;
+            coordinates[source.X, source.Y] = 0;
+            coordinates[dest.X, dest.Y] = value;
         }
     }
 }
