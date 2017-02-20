@@ -15,19 +15,20 @@ namespace Tag
 
             Printer.PrintBoard(game);
 
-            try
+            while (!game.IsCompleted())
             {
-                game.Shift(15);
-                Printer.PrintBoard(game);
-                game.Shift(11);
-                Printer.PrintBoard(game);
-                game.Shift(6);
-                Printer.PrintBoard(game);
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);                
+                try
+                {
+                    string s = Console.ReadLine();
+                    game.Shift(int.Parse(s));
+                    Console.Clear();
+                    Console.SetCursorPosition(0, 0);
+                    Printer.PrintBoard(game);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                } 
             }
         }       
     }

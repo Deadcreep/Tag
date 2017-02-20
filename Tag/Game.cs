@@ -9,8 +9,8 @@ namespace Tag
 
     struct Coordinate
     {
-        public int X { get;  set; }
-        public int Y { get;  set; }
+        public int X { get; set; }
+        public int Y { get; set; }
     }
 
     class Game
@@ -82,6 +82,18 @@ namespace Tag
                 throw new Exception("Can't move " + value);
             coordinates[source.X, source.Y] = 0;
             coordinates[dest.X, dest.Y] = value;
+        }
+        public bool IsCompleted()
+        {
+            int val = 0;
+            for (int x = 0; x < Size; x++)
+                for (int y = 0; y < Size; y++)
+                {
+                    if (coordinates[x, y] != val)
+                        return false;
+                    val++;
+                }
+            return true;
         }
     }
 }
