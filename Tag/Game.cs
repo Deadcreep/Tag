@@ -9,8 +9,8 @@ namespace Tag
     
     struct Coordinate
     {
-        int x;
-        int y;
+        public int x; //get set
+        public int y;
 
         public Coordinate(int a, int b)
         {
@@ -21,27 +21,37 @@ namespace Tag
 
     class Game
     {
-        int[,] coordinates;
-        int value;
+        int[,] coordinates;        
         int size;
 
         public Game(int size)
         {
-         FillField(size);   
+            this.size = size;
+            FillField(size);
         }
 
         private void FillField(int size)
         {
-           coordinates[size, size] = 0;
-            for (int x = 1; x < size; x++)
-                for (int y = 1; y < size; y++)
-                    coordinates[x, y] = x;
+            
+            coordinates = new int[size, size];
+            int val = 1;  
+            for (int x = 0; x < size; x++)
+                for (int y = 0; y < size; y++)
+                {
+                    coordinates[x, y] = val == 16 ? 0 : val;
+                    val++;
+                }
         }
+               
 
         public int this[int x, int y]
         {
             get
             {
+                if(x >= size || y >= size)
+                {
+                    throw new IndexOutOfRangeException();
+                }
                 return coordinates[x, y];
             }
             set
@@ -52,21 +62,27 @@ namespace Tag
 
         public Coordinate  GetLocation(int value)
         {
-            Coordinate requisiteCoordinates = new Coordinate(0,0);
-            for (int x = 1; x < size; x++)
-                for (int y = 1; y < size; y++)
+            for (int x = 0; x < size; x++)
+                for (int y = 0; y < size; y++)
                     if(value == coordinates[x, y]) 
                     {
-                        requisiteCoordinates = new Coordinate(x, y);                        
+                        return  new Coordinate(x, y);                        
                     }
-                    else continue;
-            return requisiteCoordinates;
+            throw new ArgumentException ("Value does not exist");
         }
-
         
-        public void Shift()
+        public void Shift(int value)
         {
-            throw new System.NotImplementedException();
+            if (value == 0)
+            {
+                throw new ArgumentException("Incorrect value");
+            }
+            var source = GetLocation(value);
+            var dest = GetLocation(0);
+            if (Math.Abs(source.x + source.y-dest.x-dest.y)!=1)
+                throw new Exception("Can't move " + value);
+                coordinates[source.x, source.y] = 0;
+                coordinates[dest.x, dest.y] = value;
         }
     }
 }
